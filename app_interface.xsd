@@ -1,0 +1,82 @@
+<?xml version="1.0"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:simpleType name="propertyType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="String"/>
+            <xs:enumeration value="Integer"/>
+            <xs:enumeration value="Boolean"/>
+            <xs:enumeration value="Float"/>
+            <xs:enumeration value="Double"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="property">
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="propertyType" default="String"/>
+    </xs:complexType>
+
+    <xs:complexType name="model">
+        <xs:sequence>
+            <xs:element name="List" type="list" minOccurs="0"  maxOccurs="unbounded"/>
+            <xs:element name="Object" type="object" minOccurs="0"  maxOccurs="unbounded"/>
+            <xs:element name="Property" type="property" minOccurs="0"  maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="object">
+        <xs:sequence>
+            <xs:element name="List" type="list" minOccurs="0"  maxOccurs="unbounded"/>
+            <xs:element name="Object" type="object" minOccurs="0"  maxOccurs="unbounded"/>
+            <xs:element name="Property" type="property" minOccurs="0"  maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+        <xs:attribute name="type" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="list">
+        <xs:all>
+            <xs:element name="Object" type="object" minOccurs="1" maxOccurs="1"/>
+        </xs:all>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:element name="Interfaces">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Host" minOccurs="1" maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="name" type="xs:string"/>
+                        <xs:attribute name="url" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="Model" type="model" minOccurs="0"  maxOccurs="unbounded"/>
+                <xs:element name="Interface" minOccurs="1"  maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element name="Request">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="Property" type="property" minOccurs="0"  maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                </xs:complexType>
+                            </xs:element>
+                            <xs:element name="Response">
+                                <xs:complexType>
+                                    <xs:sequence>
+                                        <xs:element name="List" type="list" minOccurs="0"  maxOccurs="unbounded"/>
+                                        <xs:element name="Object" type="object" minOccurs="0" maxOccurs="unbounded"/>
+                                        <xs:element name="Property" type="property" minOccurs="0"  maxOccurs="unbounded"/>
+                                    </xs:sequence>
+                                    <xs:attribute name="modelName" type="xs:string"/>
+                                </xs:complexType>
+                            </xs:element>
+                        </xs:sequence>
+                        <xs:attribute name="path" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>
